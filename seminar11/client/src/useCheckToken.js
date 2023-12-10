@@ -1,30 +1,37 @@
+import { useEffect } from 'react';
+
 function useCheckToken(setLoading, setLoggedIn) {
-    const token = localStorage.getItem('token');
 
-    if (token) {
-        const options = {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({token})
-        }
+    useEffect(() => {
+        const token = localStorage.getItem('token');
 
-        fetch(`${process.env.REACT_APP_API_URL}/auth/check`, options)
-        .then(res => res.json())
-        .then(res => {
-            if(res.success) {
-                setLoggedIn(true);
+        if (token) {
+            const options = {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({token})
             }
-        })
-        .catch(() => {
-            localStorage.removeItem('token');
-            window.location.href = '/login';
-        })
-        .finally(() => {
+    
+            fetch(`${process.env.REACT_APP_API_URL}/auth/check`, options)
+            .then(res => res.json())
+            .then(res => {
+                if(res.success) {
+                    setLoggedIn(true);
+                }
+            })
+            .catch(() => {
+                localStorage.removeItem('token');
+                window.location.href = '/login';
+            })
+            .finally(() => {
+                setLoading(false);
+            })
+        } else {
             setLoading(false);
-        })
-    }
+        }
+    }, []);
 }
 
 export default useCheckToken;

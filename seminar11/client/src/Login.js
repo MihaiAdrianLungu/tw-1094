@@ -1,11 +1,9 @@
-import {useNavigate} from 'react-router-dom'
 import {useState} from 'react'
 
 function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
-    const navigate = useNavigate();
 
     const fetchLogin = async () => {
         try {
@@ -22,7 +20,7 @@ function Login() {
     
             if(reponse.success) {
                 localStorage.setItem('token', reponse.data);
-                navigate('/')
+                window.location.href = '/';
             }
         } catch (error) {
             setError(error);
